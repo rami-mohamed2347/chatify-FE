@@ -7,7 +7,15 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+  colors:{
+        skyblue:'#76ABAE',
+        grayColor:"#D2E1E2"
+      },
+      width:{
+        minwidth:"46%"
+      }
+    },
   },
   plugins: [
     require("@tailwindcss/forms")({
