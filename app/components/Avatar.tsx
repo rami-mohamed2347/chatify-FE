@@ -8,7 +8,7 @@ interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {
-  console.log(user);
+  // console.log(user);
 
   return (
     <div className="relative">
@@ -26,7 +26,7 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
       >
         <Image
           alt="Avatar"
-          src={user.currentUser.image || "/images/placeholder.jpg"}
+          src={user?.image || "/images/placeholder.jpg"}
           fill
         />
       </div>
