@@ -12,9 +12,10 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     const { conversationId } = params;
 
     if (!currentUser?.id || !currentUser?.email) {
-      return new NextResponse("Unauthroized", { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Find existing conversation
     const conversation = await prisma.conversation.findUnique({
       where: {
         id: conversationId,
@@ -30,18 +31,20 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     });
 
     if (!conversation) {
-      return new NextResponse("Invalid ID ", { status: 400 });
+      return new NextResponse("Invalid ID", { status: 400 });
     }
 
-    const lastMassage = conversation.messages[conversation.messages.length - 1];
+    // Find last message
+    const lastMessage = conversation.messages[conversation.messages.length - 1];
 
-    if (!lastMassage) {
+    if (!lastMessage) {
       return NextResponse.json(conversation);
     }
 
+    // Update seen of last message
     const updatedMessage = await prisma.message.update({
       where: {
-        id: lastMassage.id,
+        id: lastMessage.id,
       },
       include: {
         sender: true,
