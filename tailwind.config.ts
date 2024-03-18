@@ -13,7 +13,7 @@ const config: Config = {
         grayColor:"#D2E1E2"
       },
       width:{
-        minwidth:"46%"
+        minwidth:"50%"
       }
     },
   },

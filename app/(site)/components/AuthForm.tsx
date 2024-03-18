@@ -54,9 +54,7 @@ const AuthFrom = () => {
   return (
   <div
       className="
-  justify-self-end
-  mt-10
-  mr-40
+ 
   sm:w-full
   sm:max-w-md
   " >
@@ -67,22 +65,27 @@ const AuthFrom = () => {
      sm:rounded-lg
      sm:px-10
     ">
-      
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+ <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
-            <Input id="name" label="Name" register={register} errors={errors} />
+<>
+<h2 className="m-auto text-center text-skyblue font-semibold">Create Your Account</h2>
+           <Input id="Fisrtname" label="First Name" register={register} errors={errors} />
+            <Input id="Lastname" label="Last Name" register={register} errors={errors} />
+            </> 
           )}
-          <h2 className="-500 m-auto text-center text-skyblue font-semibold">Welcome back!</h2>
-          <p className=" m-auto text-center text-skyblue">Please enter your details</p>
-          <Input
-            id="email"
-            label="Email"
-            type="email"
-            register={register}
-            errors={errors}
-            
-          />
-          <Input
+       
+      
+       {variant === "LOGIN" && (
+
+<><h2 className="m-auto text-center text-skyblue font-semibold">Welcome back!</h2>
+<p className=" m-auto text-center text-skyblue">Please enter your details</p></> )} 
+ <Input
+    id="email"
+    label="Email"
+    type="email"
+    register={register}
+    errors={errors} />
+ <Input
             id="password"
             label="Password"
             type="password"
@@ -101,6 +104,16 @@ const AuthFrom = () => {
         </div>
         
         </div> )}
+        {variant === "REGISTER" && (
+           <Input
+           id="Confirm password"
+           label="Confirm password"
+           type="Confirm password"
+           register={register}
+           errors={errors}
+         
+         />
+        )}
           <div>
             <Button disabled={isLoading} fullWidth type="submit">
               {variant === "LOGIN" ? "Login" : "Register"}
@@ -129,6 +142,12 @@ const AuthFrom = () => {
 
           <div className="mt-6 flex gap-2">
             <AuthSocialButton />
+          </div>
+<div className="flex gap-2 m-auto w-60 mt-5 text-gray-500"> {variant ==='LOGIN'? 'Dont have an account?':'Aready have an account'}
+          <div onClick={toggleVariant}
+          className="text-blue-600 cursor-pointer">
+ {variant ==='LOGIN'? 'Sign up':'Login'}
+          </div>
           </div>
         </div>
       </div>
