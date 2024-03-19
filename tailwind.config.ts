@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {colors:{
       skyblue:'#76ABAE',
-      grayColor:"#D2E1E2"
+      grayColor:"#D2E1E2",
+      skylight:'#d2e1e2'
     }},
   },
   plugins: [
