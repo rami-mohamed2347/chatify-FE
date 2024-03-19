@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
+import { pusherServer } from "@/app/libs/pusher";
 
 export async function POST(request: Request) {
   try {
@@ -35,6 +36,14 @@ export async function POST(request: Request) {
         include: {
           users: true,
         },
+      });
+
+      // Group chat conversationlist update Pusher
+
+      newConversation.users.forEach((user) => {
+        if (user.email) {
+          pusherServer.trigger(user.email, "conversation:new", newConversation);
+        }
       });
 
       return NextResponse.json(newConversation);
@@ -81,8 +90,15 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(newConversation);
+    // 1:1 conversationlist update Pusher
 
+    newConversation.users.map((user) => {
+      if (user.email) {
+        pusherServer.trigger(user.email, "conversation:new", newConversation);
+      }
+    });
+
+    return NextResponse.json(newConversation);
   } catch (error: any) {
     return new NextResponse("Internal Error,", { status: 500 });
   }
