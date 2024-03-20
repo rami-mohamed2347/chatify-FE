@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Input from "@/app/components/inputs/Input";
+import AuthInput from "@/app/components/inputs/AuthInput";
 import Button from "@/app/components/Button";
+import AuthButtons from "@/app/components/AuthButtons";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import toast from "react-hot-toast";
@@ -92,8 +93,7 @@ const AuthFrom = () => {
   return (
     <div
       className="
-  mt-8
-  sm:mx-auto
+ 
   sm:w-full
   sm:max-w-md
   "
@@ -101,43 +101,80 @@ const AuthFrom = () => {
       <div
         className="
      bg-white
-     px-4
-     py-8
-     shadow
+      px-4
      sm:rounded-lg
      sm:px-10
     "
       >
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
-            <Input
-              id="name"
-              label="Name"
-              register={register}
-              errors={errors}
-              disabled={isLoading}
-            />
+            <>
+              <h2 className="m-auto text-center text-skyblue font-semibold">
+                Create Your Account
+              </h2>
+              <AuthInput
+                id="Fisrtname"
+                label="First Name"
+                register={register}
+                errors={errors}
+              />
+              <AuthInput
+                id="Lastname"
+                label="Last Name"
+                register={register}
+                errors={errors}
+              />
+            </>
           )}
-          <Input
+
+          {variant === "LOGIN" && (
+            <>
+              <h2 className="m-auto text-center text-skyblue font-semibold">
+                Welcome back!
+              </h2>
+              <p className=" m-auto text-center text-skyblue">
+                Please enter your details
+              </p>
+            </>
+          )}
+          <AuthInput
             id="email"
-            label="Email address"
+            label="Email"
             type="email"
             register={register}
             errors={errors}
-            disabled={isLoading}
           />
-          <Input
+          <AuthInput
             id="password"
             label="Password"
             type="password"
             register={register}
             errors={errors}
-            disabled={isLoading}
           />
+          {variant === "LOGIN" && (
+            <div className="flex justify-between items-center text-gray-500 mt-10">
+              <div>
+                <input type="checkbox" className="mr-1" />
+                <label>Remeber Me?</label>
+              </div>
+              <div>
+                <a href="#">Forget password?</a>
+              </div>
+            </div>
+          )}
+          {variant === "REGISTER" && (
+            <AuthInput
+              id="cPassword"
+              label="Confirm password"
+              type="password"
+              register={register}
+              errors={errors}
+            />
+          )}
           <div>
-            <Button disabled={isLoading} fullWidth type="submit">
-              {variant === "LOGIN" ? "Sign in" : "Register"}
-            </Button>
+            <AuthButtons disabled={isLoading} fullWidth type="submit">
+              {variant === "LOGIN" ? "Login" : "Register"}
+            </AuthButtons>
           </div>
         </form>
 

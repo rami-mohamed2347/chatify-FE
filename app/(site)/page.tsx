@@ -3,40 +3,26 @@ import AuthForm from "./components/AuthForm";
 
 export default function Home() {
   return (
-    <div
-      className="
- flex
-  min-h-full
-  flex-col
-  justify-center
-  py-12
-  sm:px-6
-  lg:px-8
-  bg-gray-100
-  "
-    >
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Image
-          alt="logo"
-          height="48"
-          width="48"
-          className="mx-auto w-auto"
-          src="/images/logo.png"
-        />
-        <h2
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+        <div className="h-full justify-center items-center bg-skyblue lg:flex hidden md:block">
+          <Image
+            src="/images/Login-amico 1.png"
+            width={384}
+            height={384}
+            alt=""
+            className="m-auto w-96"
+          />
+        </div>
+
+        <div
           className="
-        mt-6
-        text-center
-        text-3xl
-        font-bold
-        tracking-tight
-        text-gray-900
-        "
+ m-auto
+  "
         >
-          Sign in to your account
-        </h2>
+          <AuthForm />
+        </div>
       </div>
-      <AuthForm />
-    </div>
+    </>
   );
 }
