@@ -14,12 +14,14 @@ const EmptyState = () => {
     "
     >
       <div className="text-center items-center flex flex-col">
+        <p className="  font-semibold
+            text-gray-400 text-7xl">Chatify</p>
         <h3
           className="
             mt-2
             text-2xl
             font-semibold
-            text-gray-500
+            text-gray-400
             "
         >
           Select a chat or start a new conversation
