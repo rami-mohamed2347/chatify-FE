@@ -4,8 +4,7 @@ import { IoChatboxEllipsesOutline } from 'react-icons/io5'
 
 const Footer = () => {
     return (
-        <footer>
-         
+        <footer>  
         <section aria-label="Site Footer" className=" bg-slate-800 text-white">
             <div className="max-w-screen-xl px-4 py-10 mx-auto space-y-8 sm:px-6 lg:space-y-16 lg:px-8">
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
