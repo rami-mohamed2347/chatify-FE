@@ -10,7 +10,7 @@ const EmptyState = () => {
      flex
      justify-center
      items-center
-     bg-gray-100
+     bg-white
     "
     >
       <div className="text-center items-center flex flex-col">
@@ -19,7 +19,7 @@ const EmptyState = () => {
             mt-2
             text-2xl
             font-semibold
-            text-gray-900
+            text-gray-500
             "
         >
           Select a chat or start a new conversation

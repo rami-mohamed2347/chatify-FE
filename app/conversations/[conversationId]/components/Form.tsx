@@ -54,7 +54,7 @@ const Form = () => {
         onUpload={handleUpload}
         uploadPreset="kqsh8wa4"
       >
-        <HiPhoto size={30} className="text-sky-500" />
+        <HiPhoto size={30} className="text-skyblue  hover:text-cyan-900" />
       </CldUploadButton>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -65,20 +65,23 @@ const Form = () => {
           register={register}
           errors={errors}
           required
-          placeholder="Type a message"
+          placeholder="Type your message here"
         />
         <button
           type="submit"
           className="
-         rounded-full
-         p-2
-         bg-sky-500
+         rounded-lg
+         py-2
+         px-5
+         bg-skyblue
          cursor-pointer
-         hover:bg-sky-600
+         hover:bg-cyan-900
          transition
+         flex 
         "
         >
-          <HiPaperAirplane size={18} className="text-white" />
+          <span className="text-white">Send</span>
+          <HiPaperAirplane size={18} className="text-white mt-1 ms-1" />
         </button>
       </form>
     </div>

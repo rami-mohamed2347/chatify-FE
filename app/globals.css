@@ -7,3 +7,31 @@ body,
 :root {
   height: 100%;
 }
+/* For Firefox */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+.rounded-Message{
+  border-radius: 10px 0px 10px 10px;
+  -webkit-border-radius: 15px 0px 15px 15px;
+  -moz-border-radius: 15px 0px 15px 15px;
+  -ms-border-radius: 15px 0px 15px 15px;
+  -o-border-radius: 15px 0px 15px 15px;
+}
