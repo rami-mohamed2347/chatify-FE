@@ -92,9 +92,9 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           size={32}
           onClick={() => setDrawerOpen(true)}
           className="
-         text-sky-500
+         text-skyblue
          cursor-pointer
-         hover:text-sky-600
+         hover:text-cyan-800
          transition
         "
         />

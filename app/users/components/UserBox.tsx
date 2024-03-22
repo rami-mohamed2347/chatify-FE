@@ -61,7 +61,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                 className="
                 text-sm
                 font-medium
-                text-gray-900
+                text-gray-600
                 "
               >
                 {data.name}
