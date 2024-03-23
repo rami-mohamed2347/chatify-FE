@@ -23,8 +23,22 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
   const onDelete = useCallback(() => {
     setIsLoading(true);
 
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const userId = userData?._id;
+
     axios
-      .delete(`/api/conversations/${conversationId}`)
+      .delete(
+        `https://chat-backend-citu.onrender.com/api/v1/chats`,
+        {
+          data: {
+            userId: userId,
+            chatId: conversationId,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then(() => {
         onClose();
         router.push("/conversations");
@@ -33,7 +47,6 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
       .catch(() => toast.error("Something went wrong!"))
       .finally(() => setIsLoading(false));
   }, [router, conversationId, onClose]);
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="sm:flex sm:items-start">

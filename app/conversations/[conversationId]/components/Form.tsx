@@ -9,6 +9,7 @@ import { CldUploadButton } from "next-cloudinary";
 
 const Form = () => {
   const { conversationId } = useConversation();
+  const token = localStorage.getItem("token");
 
   const {
     register,
@@ -17,23 +18,39 @@ const Form = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      message: "",
+      body: "",
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setValue("message", "", { shouldValidate: true });
-    axios.post("/api/messages", {
-      ...data,
-      conversationId,
-    });
+    setValue("body", "", { shouldValidate: true });
+    axios.post(
+      "https://chat-backend-citu.onrender.com/api/v1/messages",
+      {
+        ...data,
+        chatId: conversationId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   };
 
   const handleUpload = (result: any) => {
-    axios.post("/api/messages", {
-      image: result?.info?.secure_url,
-      conversationId,
-    });
+    axios.post(
+      "https://chat-backend-citu.onrender.com/api/v1/messages",
+      {
+        image: result?.info?.secure_url,
+        chatId: conversationId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   };
   return (
     <div
@@ -61,7 +78,7 @@ const Form = () => {
         className="flex items-center gap-2 lg:gap-4 w-full"
       >
         <MessageInput
-          id="message"
+          id="body"
           register={register}
           errors={errors}
           required

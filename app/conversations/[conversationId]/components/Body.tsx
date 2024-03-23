@@ -19,22 +19,22 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const { conversationId } = useConversation();
+  const chatId = conversationId;
 
   useEffect(() => {
-    axios.post(`/api/conversations/${conversationId}/seen`);
-  }, [conversationId]);
-
-  useEffect(() => {
-    pusherClient.subscribe(conversationId);
+    pusherClient.subscribe(chatId);
     bottomRef?.current?.scrollIntoView();
 
     const messageHandler = (message: FullMessageType) => {
-      axios.post(`/api/conversations/${conversationId}/seen`);
+      // axios.post(`/api/conversations/${conversationId}/seen`);
 
       setMessages((current) => {
         if (find(current, { id: message.id })) {
           return current;
         }
+
+        console.log(message);
+
         return [...current, message];
       });
 

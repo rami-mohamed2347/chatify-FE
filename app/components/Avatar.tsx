@@ -5,11 +5,12 @@ import Image from "next/image";
 import useActiveList from "../hooks/useActiveList";
 
 interface AvatarProps {
-  user?: User;
+  user?: any;
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {
   const { members } = useActiveList();
+  const isOnline = user?.isOnline;
   const isActive = members.indexOf(user?.email!) !== -1;
   // console.log(user);
 
@@ -29,11 +30,11 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
       >
         <Image
           alt="Avatar"
-          src={user?.image || "/images/placeholder.jpg"}
+          src={user?.avatar || "/images/placeholder.jpg"}
           fill
         />
       </div>
-      {isActive && (
+      {isOnline && (
         <span
           className="
       absolute

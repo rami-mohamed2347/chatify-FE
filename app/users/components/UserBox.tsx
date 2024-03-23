@@ -8,22 +8,35 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 interface UserBoxProps {
-  data: User;
+  data: any;
 }
 
 const UserBox: React.FC<UserBoxProps> = ({ data }) => {
+
+
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(() => {
     setIsLoading(true);
 
+    const token = localStorage.getItem("token");
+
     axios
-      .post("/api/conversations", {
-        userId: data.id,
-      })
+      .post(
+        "https://chat-backend-citu.onrender.com/api/v1/chats/createChatPrivate",
+        {
+          receiverId: data._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((data) => {
-        router.push(`/conversations/${data.data.id}`);
+        router.push(`/conversations/${data.data.chat._id}`);
+
       })
       .finally(() => setIsLoading(false));
   }, [data, router]);
@@ -64,7 +77,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                 text-gray-900
                 "
               >
-                {data.name}
+                {data.firstName}
               </p>
             </div>
           </div>

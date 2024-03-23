@@ -18,7 +18,12 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
   const session = useSession();
   const [imageModalOpen, setImageModalOpen] = useState(false);
 
-  const isOwn = session?.data?.user?.email === data?.sender?.email;
+
+  const userDataItem = localStorage.getItem("userData");
+  const userData: any = JSON.parse(userDataItem);
+
+
+  const isOwn = userData?._id === data?.senderId;
   // Filtering current user from the seen list
   const seenList = (data.seen || [])
     .filter((user) => user.email !== data?.sender?.email)
@@ -37,11 +42,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
   return (
     <div className={container}>
       <div className={avatar}>
-        <Avatar user={data.sender} />
+        <Avatar user={userData} />
       </div>
       <div className={body}>
         <div className="flex items-center gap-1">
-          <div className="text-sm text-gray-500">{data.sender.name}</div>
+          <div className="text-sm text-gray-500">{userData.firstName}</div>
           <div className="text-xs text-gray-400">
             {format(new Date(data.createdAt), "p")}
           </div>
@@ -79,7 +84,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
           text-gray-500
           "
           >
-            {`Seen by ${seenList}`}
+            {/* {`Seen by ${seenList}`} */}
           </div>
         )}
       </div>

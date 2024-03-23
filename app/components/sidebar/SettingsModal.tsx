@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -11,11 +10,12 @@ import Input from "../inputs/Input";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
 import Button from "../Button";
+import { User } from "@prisma/client";
 
 interface SettingsModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  currentUser: User;
+  currentUser: any;
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -34,15 +34,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: currentUser?.name,
-      image: currentUser?.image,
+      firstName: currentUser?.firstName,
+      image: currentUser?.avatar,
     },
   });
 
-  const image = watch("image");
+  const avatar = watch("avatar");
 
   const handleUpload = (result: any) => {
-    setValue("image", result?.info?.secure_url, {
+    setValue("avatar", result?.info?.secure_url, {
       shouldValidate: true,
     });
   };
@@ -50,9 +50,18 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsloading(true);
 
+    const token = localStorage.getItem("token");
+
     axios
-      .put("/api/settings", data)
-      .then(() => {
+      .put("https://chat-backend-citu.onrender.com/api/v1/users", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+
+
+
         router.refresh();
         onClose();
       })
@@ -82,7 +91,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               <Input
                 disabled={isLoading}
                 label="Name"
-                id="name"
+                id="firstName"
                 errors={errors}
                 required
                 register={register}
@@ -112,7 +121,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     height="48"
                     className="rounded-full"
                     src={
-                      image || currentUser?.image || "/images/placeholder.jpg"
+                      avatar || currentUser?.avatar || "/images/placeholder.jpg"
                     }
                     alt="Avatar"
                   />

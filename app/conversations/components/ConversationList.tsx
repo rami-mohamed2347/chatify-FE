@@ -13,25 +13,34 @@ import { pusherClient } from "@/app/libs/pusher";
 import { find } from "lodash";
 
 interface ConversationListProps {
-  intialItems: FullConversationType[];
-  users: User[];
+  initialItems: any[];
+  users: any[];
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
-  intialItems,
+  initialItems,
   users,
 }) => {
   const session = useSession();
-  const [items, setItems] = useState(intialItems);
+  const [items, setItems] = useState(initialItems);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // console.log(users);
+  // console.log(intialItems);
+  useEffect(() => {
+    // This effect will run whenever `initialItems` changes
+    setItems(initialItems);
+  }, [initialItems]);
 
   const router = useRouter();
 
   const { conversationId, isOpen } = useConversation();
 
   const pusherKey = useMemo(() => {
-    return session.data?.user?.email;
-  }, [session.data?.user?.email]);
+    const userData = localStorage.getItem("userData");
+    const parsedUserData = userData ? JSON.parse(userData) : null;
+    return parsedUserData ? parsedUserData._id : null;
+  }, [localStorage.getItem("userData")]);
 
   useEffect(() => {
     if (!pusherKey) {
@@ -128,11 +137,11 @@ const ConversationList: React.FC<ConversationListProps> = ({
               <MdOutlineGroupAdd size={20} />
             </div>
           </div>
-          {items.map((item) => (
+          {items?.map((item) => (
             <ConversationBox
-              key={item.id}
+              key={item._id}
               data={item}
-              selected={conversationId === item.id}
+              selected={conversationId === item._id}
             />
           ))}
         </div>

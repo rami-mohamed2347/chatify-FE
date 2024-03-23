@@ -12,7 +12,7 @@ import Avatar from "@/app/components/Avatar";
 import AvatarGroup from "@/app/components/AvatarGroup";
 
 interface ConversationBoxProps {
-  data: FullConversationType;
+  data: any;
   selected?: boolean;
 }
 
@@ -25,32 +25,32 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
   const router = useRouter();
 
   const handleClick = useCallback(() => {
-    router.push(`/conversations/${data.id}`);
+    router.push(`/conversations/${data._id}`);
   }, [data.id, router]);
 
   const lastMessage = useMemo(() => {
-    const messages = data.messages || [];
+    const messages = data.lastMessage;
 
-    return messages[messages.length - 1];
+    return messages;
   }, [data.messages]);
 
   const userEmail = useMemo(() => {
     return session.data?.user?.email;
   }, [session.data?.user?.email]);
 
-  const hasSeen = useMemo(() => {
-    if (!lastMessage) {
-      return false;
-    }
+  // const hasSeen = useMemo(() => {
+  //   if (!lastMessage) {
+  //     return false;
+  //   }
 
-    const seenArray = lastMessage.seen || [];
+  //   const seenArray = lastMessage.seen || [];
 
-    if (!userEmail) {
-      return false;
-    }
+  //   if (!userEmail) {
+  //     return false;
+  //   }
 
-    return seenArray.filter((user) => user.email === userEmail).length !== 0;
-  }, [userEmail, lastMessage]);
+  //   return seenArray.filter((user) => user.email === userEmail).length !== 0;
+  // }, [userEmail, lastMessage]);
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {
@@ -61,7 +61,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       return lastMessage.body;
     }
 
-    return "Started a conversation";
+    return lastMessage;
   }, [lastMessage]);
   return (
     <div
@@ -104,9 +104,9 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
              text-gray-900
              "
             >
-              {data.name || otherUser.name}
+              {data.isGroup ? data.name : otherUser?.firstName}
             </p>
-            {lastMessage?.createdAt && (
+            {data.updatedAt && (
               <p
                 className="
                  text-xs
@@ -114,7 +114,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
                  font-light
               "
               >
-                {format(new Date(lastMessage.createdAt), "p")}
+                {format(new Date(data.updatedAt), "p")}
               </p>
             )}
           </div>
@@ -123,8 +123,8 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
               `
              truncate
              text-sm
-            `,
-              hasSeen ? "text-gray-500" : "text-black font-medium"
+            `
+              // hasSeen ? "text-gray-500" : "text-black font-medium"
             )}
           >
             {lastMessageText}

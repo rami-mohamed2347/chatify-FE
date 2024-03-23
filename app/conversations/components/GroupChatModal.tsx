@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 interface GroupChatModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  users: User[];
+  users: any[];
 }
 
 const GroupChatModal: React.FC<GroupChatModalProps> = ({
@@ -24,6 +24,8 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsloading] = useState(false);
+  const token = localStorage.getItem("token");
+
 
   const {
     register,
@@ -42,12 +44,22 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsloading(true);
+    const usersIds = data.members.map((member: { value: any }) => member.value);
 
     axios
-      .post("api/conversations", {
-        ...data,
-        isGroup: true,
-      })
+      .post(
+        "https://chat-backend-citu.onrender.com/api/v1/chats/createGroup",
+        {
+          name: data.name,
+          users: usersIds,
+          isGroup: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(() => {
         router.refresh();
         onClose();
@@ -100,8 +112,8 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
                 disabled={isLoading}
                 label="members"
                 options={users.map((user) => ({
-                  value: user.id,
-                  label: user.name,
+                  value: user._id,
+                  label: user.firstName,
                 }))}
                 onChange={(value) =>
                   setValue("members", value, {

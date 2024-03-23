@@ -38,9 +38,11 @@ const AuthFrom = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
+      passwordConfirmation: "",
     },
   });
 
@@ -48,29 +50,106 @@ const AuthFrom = () => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
+      console.log(data);
+
       axios
-        .post("/api/register", data)
-        .then(() => signIn("credentials", data))
-        .catch(() => toast.error("Something went wrong!"))
-        .finally(() => setIsLoading(false));
+        .post(
+          "https://chat-backend-citu.onrender.com/api/v1/auth/register",
+          data
+        )
+        .then((response) => {
+          console.log("Registration successful:", response); // Logging the response
+
+          // If registration is successful, perform login
+          return axios.post(
+            "https://chat-backend-citu.onrender.com/api/v1/auth/login",
+            {
+              ...data,
+              redirect: false,
+            }
+          );
+        })
+        .then((loginResponse) => {
+          console.log("Login successful:", loginResponse);
+
+          // Check if the login response contains error
+          if (loginResponse.data.error) {
+            console.log(loginResponse.data.error);
+            toast.error("Invalid credentials");
+          } else {
+            // Successful login
+            toast.success("Logged in!");
+
+            // Optionally, you can perform additional actions here
+          }
+        })
+        .catch((error) => {
+          // Handle any errors that occurred during registration or login
+          console.error("Registration or login failed:", error);
+          toast.error("Something went wrong!");
+        })
+        .finally(() => {
+          // Regardless of the outcome (success or failure), stop loading
+          setIsLoading(false);
+        });
     }
 
     if (variant === "LOGIN") {
-      signIn("credentials", {
-        ...data,
-        redirect: false,
-      })
-        .then((callback) => {
-          if (callback?.error) {
-            toast.error("Invalid credentials");
-          }
+      axios
+        .post("https://chat-backend-citu.onrender.com/api/v1/auth/login", {
+          ...data,
+          redirect: false,
+        })
+        .then((response) => {
+          console.log(response);
 
-          if (callback?.ok && !callback?.error) {
+          // Check if the response contains user data and a token
+          if (
+            response.data.success &&
+            response.data.data &&
+            response.data.token
+          ) {
+            // Successful login
+            const { data, token } = response.data;
+            // Do something with the user data and token, such as storing them in local storage
+            localStorage.setItem("userData", JSON.stringify(data));
+            localStorage.setItem("token", token);
+            // Optionally, you can redirect the user or perform additional actions here
             toast.success("Logged in!");
+            router.push("/users");
+          } else {
+            // Handle invalid response
+            console.error("Invalid response:", response.data);
+            toast.error("Something went wrong!");
           }
         })
-        .finally(() => setIsLoading(false));
+        .catch((error) => {
+          // Handle any errors that occurred during the request
+          console.error("Login failed:", error);
+          toast.error(error.response.data.message);
+        })
+        .finally(() => {
+          // Regardless of the outcome (success or failure), stop loading
+          setIsLoading(false);
+        });
     }
+
+    // if (variant === "LOGIN") {
+    //   signIn("credentials", {
+    //     ...data,
+    //     redirect: false,
+    //   })
+    //     .then((callback) => {
+    //       if (callback?.error) {
+    //         toast.error("Invalid credentials");
+    //       }
+
+    //       if (callback?.ok && !callback?.error) {
+    //         toast.success("Logged in!");
+    //       }
+    //     })
+    //     .finally(() => setIsLoading(false));
+    // }
   };
 
   const socialAction = (action: string) => {
@@ -113,14 +192,16 @@ const AuthFrom = () => {
                 Create Your Account
               </h2>
               <AuthInput
-                id="Fisrtname"
+                id="firstName"
                 label="First Name"
+                required
                 register={register}
                 errors={errors}
               />
               <AuthInput
-                id="Lastname"
+                id="lastName"
                 label="Last Name"
+                required
                 register={register}
                 errors={errors}
               />
@@ -141,6 +222,7 @@ const AuthFrom = () => {
             id="email"
             label="Email"
             type="email"
+            required
             register={register}
             errors={errors}
           />
@@ -148,6 +230,7 @@ const AuthFrom = () => {
             id="password"
             label="Password"
             type="password"
+            required
             register={register}
             errors={errors}
           />
@@ -164,9 +247,10 @@ const AuthFrom = () => {
           )}
           {variant === "REGISTER" && (
             <AuthInput
-              id="cPassword"
+              id="passwordConfirmation"
               label="Confirm password"
               type="password"
+              required
               register={register}
               errors={errors}
             />

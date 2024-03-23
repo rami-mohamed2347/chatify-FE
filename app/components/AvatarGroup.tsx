@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import Image from "next/image";
 
 interface AvatarGroupProps {
-  users?: User[];
+  users?: any[];
 }
 
 const AvatarGroup: React.FC<AvatarGroupProps> = ({ users = [] }) => {
@@ -32,7 +32,7 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({ users = [] }) => {
         >
           <Image
             fill
-            src={user?.image || "/images/placeholder.jpg"}
+            src={user?.avatar || "/images/placeholder.jpg"}
             alt="Avatar"
           />
         </div>
