@@ -117,8 +117,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 "
                 >
                   <Image
-                    width="48"
-                    height="48"
+                    width="64"
+                    height="64"
                     className="rounded-full"
                     src={
                       avatar || currentUser?.avatar || "/images/placeholder.jpg"
@@ -146,12 +146,13 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             items-center
             justify-end
             gap-x-6
+            
            "
           >
             <Button disabled={isLoading} secondary onClick={onClose}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type="submit">
+            <Button  disabled={isLoading} type="submit">
               Save
             </Button>
           </div>

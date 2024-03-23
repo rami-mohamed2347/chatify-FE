@@ -73,13 +73,13 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
      flex
      items-center
      space-x-3
-     hover:bg-neutral-300
+     hover:bg-skyblue
      rounded-lg
      transition
      cursor-pointer
      p-3
     `,
-        selected ? "bg-neutral-100" : "bg-white"
+        selected ? "bg-sky-100" : "bg-white"
       )}
     >
       {data.isGroup ? (
@@ -110,7 +110,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
               <p
                 className="
                  text-xs
-                 text-gray-400
+                 text-gray-900
                  font-light
               "
               >

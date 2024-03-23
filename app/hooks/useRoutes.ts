@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { HiChat } from "react-icons/hi";
+import { IoHomeOutline } from "react-icons/io5";
 import { HiArrowLeftOnRectangle, HiUsers } from "react-icons/hi2";
 import axios from "axios";
 
@@ -50,6 +51,12 @@ const useRoutes = () => {
         href: "/users",
         icon: HiUsers,
         active: pathname === "/users",
+      },
+      {
+        label: "about",
+        href: "/about",
+        icon: IoHomeOutline 
+        ,
       },
       {
         label: "Logout",

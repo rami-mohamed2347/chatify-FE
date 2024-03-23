@@ -35,9 +35,7 @@ const Button: React.FC<ButtonProps> = ({
      py-2
      text-sm
      font-semibold
-     focus-visible:outline
-     focus-visible:outline-2
-     focus-visible:outline-offset-2
+    
     `,
         disabled && "opacity-50 cursor-default",
         fullWidth && "w-full",
@@ -46,7 +44,7 @@ const Button: React.FC<ButtonProps> = ({
           "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
         !secondary &&
           !danger &&
-          "bg-sky-500 hover:bg-sky-600 focus-visible:outline-sky-600"
+          "bg-skyblue hover:bg-cyan-800 focus-visible:outline-cyan-200"
       )}
     >
       {children}

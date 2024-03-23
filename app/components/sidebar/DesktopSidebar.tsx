@@ -48,6 +48,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
         flex
         flex-col
         justify-between
+        
         "
         >
           <ul
