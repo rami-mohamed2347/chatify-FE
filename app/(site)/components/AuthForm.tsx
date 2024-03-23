@@ -116,6 +116,7 @@ const AuthFrom = () => {
               <AuthInput
                 id="name"
                 label="Name"
+                required
                 register={register}
                 errors={errors}
               />
@@ -136,6 +137,7 @@ const AuthFrom = () => {
             id="email"
             label="Email"
             type="email"
+            required
             register={register}
             errors={errors}
           />
@@ -143,6 +145,7 @@ const AuthFrom = () => {
             id="password"
             label="Password"
             type="password"
+            required
             register={register}
             errors={errors}
           />
