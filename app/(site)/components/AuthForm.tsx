@@ -50,9 +50,10 @@ const AuthFrom = () => {
     if (variant === "REGISTER") {
       axios
         .post("/api/register", data)
-        .then(() => signIn("credentials", data))
+        // .then(() => signIn("credentials", data))
         .catch(() => toast.error("Something went wrong!"))
         .finally(() => setIsLoading(false));
+      console.log("data", data);
     }
 
     if (variant === "LOGIN") {
@@ -113,14 +114,8 @@ const AuthFrom = () => {
                 Create Your Account
               </h2>
               <AuthInput
-                id="Fisrtname"
-                label="First Name"
-                register={register}
-                errors={errors}
-              />
-              <AuthInput
-                id="Lastname"
-                label="Last Name"
+                id="name"
+                label="Name"
                 register={register}
                 errors={errors}
               />
@@ -162,20 +157,10 @@ const AuthFrom = () => {
               </div>
             </div>
           )}
-          {variant === "REGISTER" && (
-            <AuthInput
-              id="cPassword"
-              label="Confirm password"
-              type="password"
-              register={register}
-              errors={errors}
-            />
-          )}
           <div>
             <AuthButtons disabled={isLoading} fullWidth type="submit">
               {variant === "LOGIN" ? "Login" : "Register"}
             </AuthButtons>
-            
           </div>
         </form>
 
