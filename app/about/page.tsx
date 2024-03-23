@@ -1,9 +1,12 @@
+"use client";
 import Link from 'next/link'
 import React from 'react'
 import { CgCheckO } from 'react-icons/cg'
 import { IoChatboxEllipsesOutline } from 'react-icons/io5'
 import { MdGroups } from 'react-icons/md'
 import { TbLockSquareRoundedFilled } from 'react-icons/tb'
+import Footer from './footer/Footer';
+import { useSession } from "next-auth/react";
 
 
 export default function LandingPage() {
@@ -19,7 +22,10 @@ export default function LandingPage() {
       text:"Groups to keep in touch",
     }
   ]
+  const session = useSession();
+  const userName=session?.data?.user?.name || ''
   
+
   return <>
   <div className='container m-auto'>
     <nav className=" py-4">
@@ -36,8 +42,10 @@ export default function LandingPage() {
       </ul>
     </li>
     <li>
-      <Link href={'/'} className="border border-skyblue shadow shadow-slate-700 hover:bg-skyblue text-skyblue hover:text-white font-bold py-2 px-4 rounded">
-        Login
+      <Link
+       href={`${userName?'/conversations':'/'}`}
+        className="border border-skyblue shadow shadow-slate-700 hover:bg-skyblue text-skyblue hover:text-white font-bold py-2 px-4 rounded">
+        {userName?`Hello, ${userName}`:'Login'}
       </Link>
     </li>
   </ul>
@@ -47,7 +55,7 @@ export default function LandingPage() {
     <div className="flex flex-col max-w-96 m-auto items-start rounded-md">
       <h1 className="py-4 text-4xl font-semibold">Start chatting with friends, anytime, anywhere with Talkify </h1>
     <p className='text-slate-500 my-2'>Great software that allows you to chat from any place at any time without any interruption.</p>
-    <Link className='text-white my-2 shadow shadow-slate-700 bg-skyblue hover:bg-cyan-900 p-2 rounded' href="/" >Start Chatting now</Link>
+    <Link className='text-white my-2 shadow shadow-slate-700 bg-skyblue hover:bg-cyan-900 p-2 rounded' href={`${userName?'/conversations':'/'}`} >Start Chatting now</Link>
     </div>
     <div className=" rounded-md">
       <img src="/images/Group Chat-rafiki 1.png" alt="Chatify" />
@@ -79,6 +87,6 @@ export default function LandingPage() {
 
 </div>
   </section>
+  <Footer/>
     </>
-  
 }

@@ -1,16 +1,28 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Input from "@/app/components/inputs/Input";
+import AuthInput from "@/app/components/inputs/AuthInput";
 import Button from "@/app/components/Button";
+import AuthButtons from "@/app/components/AuthButtons";
 import AuthSocialButton from "./AuthSocialButton";
+import { BsGithub, BsGoogle } from "react-icons/bs";
+import toast from "react-hot-toast";
+import { signIn, useSession } from "next-auth/react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type Variant = "LOGIN" | "REGISTER";
 
 const AuthFrom = () => {
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session?.status === "authenticated") router.push("/users");
+  }, [session?.status, router]);
 
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {
@@ -36,25 +48,53 @@ const AuthFrom = () => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
-      // axios register
+      axios
+        .post("/api/register", data)
+        // .then(() => signIn("credentials", data))
+        .catch(() => toast.error("Something went wrong!"))
+        .finally(() => setIsLoading(false));
+      console.log("data", data);
     }
 
     if (variant === "LOGIN") {
-      // nextauth signin
+      signIn("credentials", {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("Invalid credentials");
+          }
+
+          if (callback?.ok && !callback?.error) {
+            toast.success("Logged in!");
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
   const socialAction = (action: string) => {
     setIsLoading(true);
 
-    // NextAuth social sign in
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid Credentials");
+        }
+
+        if (callback?.ok && !callback?.error) {
+          toast.success("Logged in!");
+          router.push("/users");
+        }
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
     <div
       className="
-  mt-8
-  sm:mx-auto
+ 
   sm:w-full
   sm:max-w-md
   "
@@ -62,35 +102,65 @@ const AuthFrom = () => {
       <div
         className="
      bg-white
-     px-4
-     py-8
-     shadow
+      px-4
      sm:rounded-lg
      sm:px-10
     "
       >
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
-            <Input id="name" label="Name" register={register} errors={errors} />
+            <>
+              <h2 className="m-auto text-center text-skyblue font-semibold">
+                Create Your Account
+              </h2>
+              <AuthInput
+                id="name"
+                label="Name"
+                register={register}
+                errors={errors}
+              />
+            </>
           )}
-          <Input
+
+          {variant === "LOGIN" && (
+            <>
+              <h2 className="m-auto text-center text-skyblue font-semibold">
+                Welcome back!
+              </h2>
+              <p className=" m-auto text-center text-skyblue">
+                Please enter your details
+              </p>
+            </>
+          )}
+          <AuthInput
             id="email"
-            label="Email address"
+            label="Email"
             type="email"
             register={register}
             errors={errors}
           />
-          <Input
+          <AuthInput
             id="password"
             label="Password"
             type="password"
             register={register}
             errors={errors}
           />
+          {variant === "LOGIN" && (
+            <div className="flex justify-between items-center text-gray-500 mt-10">
+              <div>
+                <input type="checkbox" className="mr-1" />
+                <label>Remeber Me?</label>
+              </div>
+              <div>
+                <a href="#">Forget password?</a>
+              </div>
+            </div>
+          )}
           <div>
-            <Button disabled={isLoading} fullWidth type="submit">
-              {variant === "LOGIN" ? "Sign in" : "Register"}
-            </Button>
+            <AuthButtons disabled={isLoading} fullWidth type="submit">
+              {variant === "LOGIN" ? "Login" : "Register"}
+            </AuthButtons>
           </div>
         </form>
 
@@ -114,7 +184,36 @@ const AuthFrom = () => {
           </div>
 
           <div className="mt-6 flex gap-2">
-            <AuthSocialButton />
+            <AuthSocialButton
+              icon={BsGithub}
+              onClick={() => socialAction("github")}
+            />
+            <AuthSocialButton
+              icon={BsGoogle}
+              onClick={() => socialAction("google")}
+            />
+          </div>
+        </div>
+
+        <div
+          className="
+         flex
+         gap-2
+         justify-center
+         text-sm
+         mt-6
+         px-2
+         text-gray-500
+        
+        "
+        >
+          <div>
+            {variant === "LOGIN"
+              ? "New to Chatify?"
+              : "Already have an account?"}
+          </div>
+          <div onClick={toggleVariant} className="underline cursor-pointer">
+            {variant === "LOGIN" ? "Create an account" : "Login"}
           </div>
         </div>
       </div>

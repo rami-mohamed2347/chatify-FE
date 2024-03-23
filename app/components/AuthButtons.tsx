@@ -12,7 +12,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const AuthButtons: React.FC<ButtonProps> = ({
   type,
   fullWidth,
   children,
@@ -30,21 +30,24 @@ const Button: React.FC<ButtonProps> = ({
         `
      flex
      justify-center
-     rounded-md
+     rounded-xl
+     m-auto
      px-3
      py-2
      text-sm
      font-semibold
-    
+     focus-visible:outline
+     focus-visible:outline-2
+     focus-visible:outline-offset-2
     `,
         disabled && "opacity-50 cursor-default",
-        fullWidth && "w-full",
+        fullWidth && "w-60",
         secondary ? "text-gray-900" : "text-white",
         danger &&
           "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
         !secondary &&
           !danger &&
-          "bg-skyblue hover:bg-cyan-800 focus-visible:outline-cyan-200"
+          "bg-skyblue hover:bg-skyblue focus-visible:outline-skyblue"
       )}
     >
       {children}
@@ -52,4 +55,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default AuthButtons;
